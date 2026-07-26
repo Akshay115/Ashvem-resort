@@ -1,138 +1,87 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { RESORT_INFO } from '../data/resortData';
-import { Calendar, Users, Home, MapPin, ArrowRight, Star, Sparkles } from 'lucide-react';
+import { MapPin, ExternalLink, MessageCircle, Star, Sparkles, Compass } from 'lucide-react';
 
 export default function Hero({ onOpenBooking }) {
-  const [checkIn, setCheckIn] = useState('');
-  const [checkOut, setCheckOut] = useState('');
-  const [guests, setGuests] = useState('2 Guests');
-  const [roomType, setRoomType] = useState('All Cottages');
-
-  const handleSearch = (e) => {
-    e.preventDefault();
-    onOpenBooking({ checkIn, checkOut, guests, roomType });
-  };
-
   return (
-    <section className="relative min-h-screen flex items-center justify-center pt-24 pb-16 overflow-hidden">
-      {/* Background Hero Image with Light Vignette */}
+    <section className="relative min-h-[92vh] flex items-center justify-center pt-28 pb-20 overflow-hidden">
+      {/* Background Hero Image */}
       <div className="absolute inset-0 z-0">
         <img
           src="/images/hero.jpg"
           alt="Anahata Retreat Beach Front Resort Ashwem Goa"
-          className="w-full h-full object-cover object-center scale-105 transform animate-pulse duration-[10000ms]"
+          className="w-full h-full object-cover object-center scale-105 transform animate-pulse duration-[12000ms]"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#191816] via-[#191816]/50 to-black/40" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#FAF8F5] via-black/40 to-black/50" />
       </div>
 
       {/* Floating Badges */}
       <div className="absolute top-28 right-8 hidden lg:flex flex-col gap-3 z-10">
-        <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-black/40 backdrop-blur-md border border-white/15 text-xs text-[#E8DFD1]">
-          <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
-          <span>TripAdvisor Travelers' Choice</span>
+        <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/80 backdrop-blur-md border border-[#E6DEC0] text-xs text-[#2C2825] shadow-lg">
+          <Star className="w-4 h-4 text-amber-500 fill-amber-500" />
+          <span className="font-medium">TripAdvisor Travelers' Choice</span>
         </div>
-        <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-black/40 backdrop-blur-md border border-white/15 text-xs text-[#E8DFD1]">
-          <Sparkles className="w-3.5 h-3.5 text-[#D97757]" />
-          <span>Direct Ashwem Beachfront</span>
+        <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/80 backdrop-blur-md border border-[#E6DEC0] text-xs text-[#2C2825] shadow-lg">
+          <Sparkles className="w-4 h-4 text-[#D97757]" />
+          <span className="font-medium">Direct Ashwem Beachfront</span>
         </div>
       </div>
 
-      <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 text-center text-[#E8DFD1]">
+      <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 text-center">
         {/* Sub-header badge */}
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#1F4045]/80 backdrop-blur-md border border-emerald-500/30 text-[11px] sm:text-xs font-semibold uppercase tracking-[0.25em] text-[#D4C3A3] mb-6 shadow-lg">
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/90 backdrop-blur-md border border-[#E6DEC0] text-xs font-semibold uppercase tracking-[0.25em] text-[#D97757] mb-6 shadow-md">
           <MapPin className="w-3.5 h-3.5 text-[#D97757]" />
           <span>Ashwem Beach • North Goa</span>
         </div>
 
         {/* Hero Title */}
-        <h1 className="font-serif text-4xl sm:text-6xl md:text-7xl lg:text-8xl tracking-tight text-[#FAF8F5] leading-none mb-6 drop-shadow-lg font-normal">
+        <h1 className="font-serif text-4xl sm:text-6xl md:text-7xl lg:text-8xl tracking-tight text-[#FAF8F5] leading-none mb-6 drop-shadow-md font-light">
           Barefoot Luxury <br />
-          <span className="italic font-light text-[#D97757]">by the Arabian Sea</span>
+          <span className="italic font-light text-[#E8DFD1]">by the Arabian Sea</span>
         </h1>
 
-        <p className="max-w-2xl mx-auto text-sm sm:text-base md:text-lg font-light text-[#E8DFD1]/90 tracking-wide leading-relaxed mb-10 drop-shadow">
-          Unwind in authentic wooden eco-cottages nestled right on the soft sands of Ashwem. Experience organic beachfront dining at L'Atelier, daily oceanfront yoga shalas, and Ayurvedic healing.
+        <p className="max-w-2xl mx-auto text-base sm:text-lg md:text-xl font-light text-[#FAF8F5]/90 tracking-wide leading-relaxed mb-10 drop-shadow">
+          Unwind in authentic wooden eco-cottages nestled directly on the soft golden sands of Ashwem. Experience organic beachfront dining at L'Atelier, daily oceanfront yoga shalas, and Ayurvedic healing.
         </p>
 
-        {/* Availability Search Bar */}
-        <div className="bg-[#191816]/90 backdrop-blur-xl border border-white/15 rounded-2xl p-4 sm:p-6 shadow-2xl max-w-4xl mx-auto text-left">
-          <form onSubmit={handleSearch} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {/* Check-In */}
-            <div className="flex flex-col gap-1.5">
-              <label className="text-[10px] uppercase tracking-widest text-[#D4C3A3]">Check-In Date</label>
-              <div className="flex items-center gap-2 bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-xs text-[#E8DFD1]">
-                <Calendar className="w-4 h-4 text-[#D97757]" />
-                <input
-                  type="date"
-                  value={checkIn}
-                  onChange={(e) => setCheckIn(e.target.value)}
-                  className="bg-transparent border-none outline-none w-full text-xs text-[#E8DFD1]"
-                />
-              </div>
-            </div>
+        {/* Action Buttons (NO Date Picker) */}
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-md mx-auto">
+          <a
+            href={RESORT_INFO.swiftbookUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full sm:w-auto px-8 py-4 rounded-full bg-[#D97757] hover:bg-[#c66546] text-white text-xs font-semibold uppercase tracking-[0.2em] flex items-center justify-center gap-2 shadow-xl hover:shadow-2xl transition-all transform hover:-translate-y-0.5"
+          >
+            <span>Book Your Stay</span>
+            <ExternalLink className="w-4 h-4" />
+          </a>
 
-            {/* Check-Out */}
-            <div className="flex flex-col gap-1.5">
-              <label className="text-[10px] uppercase tracking-widest text-[#D4C3A3]">Check-Out Date</label>
-              <div className="flex items-center gap-2 bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-xs text-[#E8DFD1]">
-                <Calendar className="w-4 h-4 text-[#D97757]" />
-                <input
-                  type="date"
-                  value={checkOut}
-                  onChange={(e) => setCheckOut(e.target.value)}
-                  className="bg-transparent border-none outline-none w-full text-xs text-[#E8DFD1]"
-                />
-              </div>
-            </div>
-
-            {/* Guests */}
-            <div className="flex flex-col gap-1.5">
-              <label className="text-[10px] uppercase tracking-widest text-[#D4C3A3]">Guests</label>
-              <div className="flex items-center gap-2 bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-xs text-[#E8DFD1]">
-                <Users className="w-4 h-4 text-[#D97757]" />
-                <select
-                  value={guests}
-                  onChange={(e) => setGuests(e.target.value)}
-                  className="bg-transparent border-none outline-none w-full text-xs text-[#E8DFD1]"
-                >
-                  <option value="1 Guest" className="bg-[#191816]">1 Guest</option>
-                  <option value="2 Guests" className="bg-[#191816]">2 Guests</option>
-                  <option value="3 Guests" className="bg-[#191816]">3 Guests</option>
-                  <option value="4+ Guests" className="bg-[#191816]">4+ Guests</option>
-                </select>
-              </div>
-            </div>
-
-            {/* Search Submit Button */}
-            <div className="flex items-end">
-              <button
-                type="submit"
-                className="w-full h-[42px] flex items-center justify-center gap-2 bg-[#D97757] hover:bg-[#c66546] text-white text-xs font-semibold uppercase tracking-wider rounded-xl transition-all shadow-lg hover:shadow-orange-900/50"
-              >
-                <span>Check Availability</span>
-                <ArrowRight className="w-4 h-4" />
-              </button>
-            </div>
-          </form>
+          <button
+            onClick={() => onOpenBooking()}
+            className="w-full sm:w-auto px-8 py-4 rounded-full bg-white/90 hover:bg-white text-[#2C2825] text-xs font-semibold uppercase tracking-[0.2em] flex items-center justify-center gap-2 border border-[#E6DEC0] shadow-xl transition-all"
+          >
+            <MessageCircle className="w-4 h-4 text-emerald-600" />
+            <span>Contact Concierge</span>
+          </button>
         </div>
 
-        {/* Feature Highlights Grid */}
-        <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-          <div className="p-3 rounded-xl bg-white/5 border border-white/5 backdrop-blur-sm">
-            <span className="block font-serif text-lg text-[#FAF8F5]">Direct Beach</span>
-            <span className="text-[11px] text-[#D4C3A3]">0m from Ashwem Sand</span>
+        {/* Feature Highlights Banner */}
+        <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+          <div className="p-4 rounded-2xl bg-white/80 border border-[#E6DEC0] backdrop-blur-md shadow-md text-[#2C2825]">
+            <span className="block font-serif text-xl font-medium text-[#D97757]">Direct Beach</span>
+            <span className="text-xs text-[#7A7067]">0m from Ashwem Sand</span>
           </div>
-          <div className="p-3 rounded-xl bg-white/5 border border-white/5 backdrop-blur-sm">
-            <span className="block font-serif text-lg text-[#FAF8F5]">L'Atelier Dining</span>
-            <span className="text-[11px] text-[#D4C3A3]">Organic Oceanfront Bistro</span>
+          <div className="p-4 rounded-2xl bg-white/80 border border-[#E6DEC0] backdrop-blur-md shadow-md text-[#2C2825]">
+            <span className="block font-serif text-xl font-medium text-[#D97757]">L'Atelier Dining</span>
+            <span className="text-xs text-[#7A7067]">Organic Oceanfront Bistro</span>
           </div>
-          <div className="p-3 rounded-xl bg-white/5 border border-white/5 backdrop-blur-sm">
-            <span className="block font-serif text-lg text-[#FAF8F5]">Yoga Shala</span>
-            <span className="text-[11px] text-[#D4C3A3]">Daily Sunrise Sessions</span>
+          <div className="p-4 rounded-2xl bg-white/80 border border-[#E6DEC0] backdrop-blur-md shadow-md text-[#2C2825]">
+            <span className="block font-serif text-xl font-medium text-[#D97757]">Yoga Shala</span>
+            <span className="text-xs text-[#7A7067]">Daily Sunrise Sessions</span>
           </div>
-          <div className="p-3 rounded-xl bg-white/5 border border-white/5 backdrop-blur-sm">
-            <span className="block font-serif text-lg text-[#FAF8F5]">Ayurvedic Spa</span>
-            <span className="text-[11px] text-[#D4C3A3]">Holistic Soul Healing</span>
+          <div className="p-4 rounded-2xl bg-white/80 border border-[#E6DEC0] backdrop-blur-md shadow-md text-[#2C2825]">
+            <span className="block font-serif text-xl font-medium text-[#D97757]">Ayurvedic Spa</span>
+            <span className="text-xs text-[#7A7067]">Holistic Soul Healing</span>
           </div>
         </div>
       </div>

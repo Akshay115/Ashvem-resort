@@ -4,6 +4,7 @@ import Hero from './components/Hero';
 import Accommodations from './components/Accommodations';
 import Dining from './components/Dining';
 import Wellness from './components/Wellness';
+import Gallery from './components/Gallery';
 import ResortMap from './components/ResortMap';
 import Testimonials from './components/Testimonials';
 import Footer from './components/Footer';
@@ -25,14 +26,14 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#191816] text-[#E8DFD1] font-sans selection:bg-[#D97757] selection:text-white">
-      {/* Navigation */}
+    <div className="min-h-screen bg-[#FAF8F5] text-[#2C2825] font-sans selection:bg-[#D97757] selection:text-white">
+      {/* Sticky Navigation */}
       <Navbar onOpenBooking={handleOpenBooking} />
 
-      {/* Hero Section */}
+      {/* Hero Banner */}
       <Hero onOpenBooking={handleOpenBooking} />
 
-      {/* Accommodations & Cottages */}
+      {/* Eco Cottages & Suites */}
       <Accommodations onSelectRoom={(room) => handleOpenBooking(room)} />
 
       {/* L'Atelier Beachfront Dining */}
@@ -41,19 +42,22 @@ export default function App() {
       {/* Yoga Shala & Ayurvedic Spa */}
       <Wellness onOpenBooking={handleOpenBooking} />
 
+      {/* Photo & Video Gallery */}
+      <Gallery />
+
       {/* Interactive Resort Grounds Map */}
       <ResortMap />
 
-      {/* Guest Stories & Social */}
+      {/* Guest Stories */}
       <Testimonials />
 
       {/* Footer */}
       <Footer onOpenBooking={handleOpenBooking} />
 
-      {/* Ambient Ocean Wave Sound Player */}
+      {/* Floating Ocean Waves Sound Player (Waves Icon Only, Sound ON by default) */}
       <SoundPlayer />
 
-      {/* Booking & Concierge Modal */}
+      {/* Concierge & Swiftbook Booking Modal */}
       <BookingModal
         isOpen={bookingModalOpen}
         onClose={handleCloseBooking}

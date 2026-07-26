@@ -1,57 +1,60 @@
 import React, { useState } from 'react';
-import { YOGA_SCHEDULE, SPA_TREATMENTS } from '../data/resortData';
-import { Sun, Heart, Sparkles, Clock, Calendar, CheckCircle2 } from 'lucide-react';
+import { YOGA_SCHEDULE, SPA_TREATMENTS, RESORT_INFO } from '../data/resortData';
+import { Clock, ExternalLink, MessageCircle } from 'lucide-react';
 
 export default function Wellness({ onOpenBooking }) {
   const [activeTab, setActiveTab] = useState('yoga');
 
   return (
-    <section id="wellness" className="py-24 bg-[#191816] text-[#E8DFD1] relative">
+    <section id="wellness" className="py-24 bg-[#FAF8F5] text-[#2C2825] relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
           <span className="text-xs uppercase tracking-[0.3em] text-[#D97757] font-semibold block mb-3">
             Mindfulness & Rejuvenation
           </span>
-          <h2 className="font-serif text-4xl sm:text-5xl lg:text-6xl text-[#FAF8F5] font-light mb-6">
+          <h2 className="font-serif text-4xl sm:text-5xl lg:text-6xl text-[#1A1817] font-light mb-6">
             Oceanfront Yoga Shala & Ayurvedic Spa
           </h2>
-          <p className="text-sm sm:text-base text-[#E8DFD1]/80 font-light leading-relaxed">
+          <p className="text-sm sm:text-base text-[#7A7067] font-light leading-relaxed">
             Align body and soul in our open-air bamboo Shala directly overlooking the wave breaks of Ashwem Beach. Experience authentic Ayurvedic healing, sound baths, and oceanfront meditation.
           </p>
         </div>
 
         {/* Shala Image Showcase */}
-        <div className="relative rounded-3xl overflow-hidden shadow-2xl border border-white/10 mb-16 h-72 sm:h-96">
+        <div className="relative rounded-3xl overflow-hidden shadow-2xl border border-[#E6DEC0] mb-16 h-72 sm:h-96">
           <img
             src="/images/yoga.jpg"
             alt="Anahata Yoga Shala Ashwem Goa"
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#191816] via-transparent to-black/30" />
-          <div className="absolute bottom-6 left-6 right-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/30" />
+          <div className="absolute bottom-6 left-6 right-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 text-white">
             <div>
-              <span className="text-[10px] uppercase tracking-widest text-[#D4C3A3]">Open Daily</span>
-              <h3 className="font-serif text-2xl text-[#FAF8F5]">Sunrise & Sunset Yoga Sessions</h3>
+              <span className="text-[10px] uppercase tracking-widest text-emerald-300 font-medium">Open Daily</span>
+              <h3 className="font-serif text-2xl sm:text-3xl text-white font-normal">Sunrise & Sunset Yoga Sessions</h3>
             </div>
-            <button
-              onClick={() => onOpenBooking({ service: "Yoga Shala Drop-In / Retreat Pass" })}
-              className="px-6 py-2.5 rounded-full bg-[#D97757] hover:bg-[#c66546] text-white text-xs uppercase tracking-wider font-semibold shadow-lg transition-all"
+            <a
+              href={RESORT_INFO.swiftbookUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-6 py-3 rounded-full bg-[#D97757] hover:bg-[#c66546] text-white text-xs uppercase tracking-wider font-semibold shadow-lg transition-all flex items-center gap-2"
             >
-              Join Yoga Class
-            </button>
+              <span>Join Yoga Retreat</span>
+              <ExternalLink className="w-3.5 h-3.5" />
+            </a>
           </div>
         </div>
 
         {/* Tab Selector: Yoga Schedule vs Spa Menu */}
         <div className="flex justify-center mb-10">
-          <div className="bg-white/5 border border-white/10 p-1.5 rounded-full flex gap-2">
+          <div className="bg-white border border-[#E6DEC0] p-1.5 rounded-full flex gap-2 shadow-md">
             <button
               onClick={() => setActiveTab('yoga')}
               className={`px-6 py-2.5 rounded-full text-xs uppercase tracking-wider font-semibold transition-all ${
                 activeTab === 'yoga'
-                  ? 'bg-[#1F4045] text-emerald-300 shadow-md'
-                  : 'text-[#E8DFD1]/70 hover:text-white'
+                  ? 'bg-[#1F4045] text-white shadow-sm'
+                  : 'text-[#7A7067] hover:text-[#2C2825]'
               }`}
             >
               Daily Yoga Shala Schedule
@@ -60,8 +63,8 @@ export default function Wellness({ onOpenBooking }) {
               onClick={() => setActiveTab('spa')}
               className={`px-6 py-2.5 rounded-full text-xs uppercase tracking-wider font-semibold transition-all ${
                 activeTab === 'spa'
-                  ? 'bg-[#1F4045] text-emerald-300 shadow-md'
-                  : 'text-[#E8DFD1]/70 hover:text-white'
+                  ? 'bg-[#1F4045] text-white shadow-sm'
+                  : 'text-[#7A7067] hover:text-[#2C2825]'
               }`}
             >
               Ayurvedic Spa Menu
@@ -73,51 +76,56 @@ export default function Wellness({ onOpenBooking }) {
         {activeTab === 'yoga' && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {YOGA_SCHEDULE.map((session, idx) => (
-              <div key={idx} className="p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-[#D97757]/40 transition-all flex flex-col justify-between">
+              <div key={idx} className="p-6 rounded-3xl bg-white border border-[#E6DEC0] hover:border-[#D97757] transition-all flex flex-col justify-between shadow-md">
                 <div>
-                  <div className="flex items-center justify-between text-xs text-[#D4C3A3] mb-3">
+                  <div className="flex items-center justify-between text-xs text-[#7A7067] mb-3">
                     <div className="flex items-center gap-1.5">
                       <Clock className="w-3.5 h-3.5 text-[#D97757]" />
-                      <span>{session.time}</span>
+                      <span className="font-medium text-[#2C2825]">{session.time}</span>
                     </div>
-                    <span className="px-2.5 py-0.5 rounded-full bg-white/10 text-[10px] uppercase tracking-wider">{session.level}</span>
+                    <span className="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] uppercase tracking-wider font-semibold">{session.level}</span>
                   </div>
-                  <h4 className="font-serif text-xl text-[#FAF8F5] mb-2">{session.title}</h4>
-                  <p className="text-xs text-[#E8DFD1]/70">Led by Certified Yoga Master: {session.instructor}</p>
+                  <h4 className="font-serif text-2xl text-[#1A1817] mb-2">{session.title}</h4>
+                  <p className="text-xs text-[#7A7067]">Led by Certified Yoga Master: {session.instructor}</p>
                 </div>
-                <div className="mt-4 pt-4 border-t border-white/10 flex justify-between items-center">
-                  <span className="text-[11px] text-emerald-400 font-medium">Complimentary for In-House Guests</span>
-                  <button
-                    onClick={() => onOpenBooking({ service: `Yoga Session: ${session.title}` })}
-                    className="text-xs text-[#D97757] hover:underline font-semibold"
+                <div className="mt-6 pt-4 border-t border-[#E6DEC0] flex justify-between items-center">
+                  <span className="text-[11px] text-emerald-700 font-medium">Complimentary for In-House Guests</span>
+                  <a
+                    href={RESORT_INFO.swiftbookUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-xs text-[#D97757] hover:underline font-semibold flex items-center gap-1"
                   >
-                    Reserve Mat &rarr;
-                  </button>
+                    <span>Reserve Mat</span>
+                    <ExternalLink className="w-3 h-3" />
+                  </a>
                 </div>
               </div>
             ))}
           </div>
         )}
 
-        {/* Tab 2: Spa Menu */}
+        {/* Tab 2: Spa Menu (NO PRICES) */}
         {activeTab === 'spa' && (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {SPA_TREATMENTS.map((spa, idx) => (
-              <div key={idx} className="p-6 rounded-2xl bg-white/5 border border-white/10 flex flex-col justify-between">
+              <div key={idx} className="p-6 rounded-3xl bg-white border border-[#E6DEC0] flex flex-col justify-between shadow-md">
                 <div>
                   <div className="flex justify-between items-baseline mb-2">
-                    <span className="text-xs text-[#D4C3A3]">{spa.duration}</span>
-                    <span className="font-serif text-xl text-[#D97757] font-semibold">{spa.price}</span>
+                    <span className="text-xs font-semibold text-[#D97757] uppercase tracking-wider">{spa.duration}</span>
                   </div>
-                  <h4 className="font-serif text-xl text-[#FAF8F5] mb-3">{spa.name}</h4>
-                  <p className="text-xs text-[#E8DFD1]/80 font-light leading-relaxed mb-4">{spa.desc}</p>
+                  <h4 className="font-serif text-2xl text-[#1A1817] mb-3">{spa.name}</h4>
+                  <p className="text-xs text-[#7A7067] font-light leading-relaxed mb-6">{spa.desc}</p>
                 </div>
-                <button
-                  onClick={() => onOpenBooking({ service: `Spa Therapy: ${spa.name}` })}
-                  className="w-full py-2.5 rounded-xl border border-white/20 hover:border-[#D97757] text-xs uppercase tracking-wider font-semibold text-[#E8DFD1] hover:text-[#D97757] transition-all text-center"
+                <a
+                  href={RESORT_INFO.swiftbookUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full py-3 rounded-xl bg-[#D97757] hover:bg-[#c66546] text-white text-xs uppercase tracking-wider font-semibold transition-all text-center flex items-center justify-center gap-1.5 shadow-sm"
                 >
-                  Book Spa Session
-                </button>
+                  <span>Book Spa Session</span>
+                  <ExternalLink className="w-3.5 h-3.5" />
+                </a>
               </div>
             ))}
           </div>
