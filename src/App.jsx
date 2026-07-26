@@ -76,7 +76,7 @@ function App() {
     </motion.div>}</AnimatePresence>
 
     <section className="hero" id="top">
-      <motion.img initial={{ scale: 1.12 }} animate={{ scale: 1 }} transition={{ duration: 2.4, ease: 'easeOut' }} src="/images/real/real_hero.jpg" alt="Palm-fringed Ashwem Beach at Anahata Retreat" />
+      <motion.img initial={{ scale: 1.12 }} animate={{ scale: 1 }} transition={{ duration: 2.4, ease: 'easeOut' }} src="/images/real/real_beach.jpg" alt="Palm-fringed beachfront at Anahata Retreat on Ashwem Beach" />
       <div className="hero-shade" />
       <motion.div className="hero-copy" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .5, duration: 1.2 }}>
         <p className="eyebrow light">Ashwem Beach · North Goa</p>
