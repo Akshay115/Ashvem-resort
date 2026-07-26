@@ -8,7 +8,7 @@ const stays = [
   {
     name: 'Sea-view Bungalows',
     note: 'A front-row seat to the Arabian Sea',
-    image: '/images/real/199A2451.jpg',
+    image: '/images/sea-view-bungalow.webp',
     description: 'Generous, light-filled spaces with private sit-outs, made for slow mornings and long sunsets.'
   },
   {
@@ -23,7 +23,7 @@ const moments = [
   ['/images/real/real_beach.jpg', 'The beach, at your doorstep'],
   ['/images/real/real_dining.jpg', 'Fresh plates at L’Atelier'],
   ['/images/real/real_yoga.jpg', 'Move with the morning'],
-  ['/images/real/094a0d_83ab9b1d9d3a43fda7618f571117ab36~mv2.jpg', 'Golden hours, unhurried'],
+  ['/images/golden-hour.webp', 'Golden hours, unhurried'],
   ['/images/real/094a0d_2940186ec2e1433aa5a3f51d4f19d90c~mv2.jpg', 'A home among palms']
 ];
 
@@ -76,7 +76,7 @@ function App() {
     </motion.div>}</AnimatePresence>
 
     <section className="hero" id="top">
-      <motion.img initial={{ scale: 1.12 }} animate={{ scale: 1 }} transition={{ duration: 2.4, ease: 'easeOut' }} src="/images/real/real_beach.jpg" alt="Palm-fringed beachfront at Anahata Retreat on Ashwem Beach" />
+      <motion.img initial={{ scale: 1.12 }} animate={{ scale: 1 }} transition={{ duration: 2.4, ease: 'easeOut' }} src="/images/anahata-hero.webp" alt="Anahata Retreat overlooking palm-fringed Ashwem Beach" />
       <div className="hero-shade" />
       <motion.div className="hero-copy" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .5, duration: 1.2 }}>
         <p className="eyebrow light">Ashwem Beach · North Goa</p>
