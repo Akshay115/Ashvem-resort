@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ROOMS, RESORT_INFO } from '../data/resortData';
 import { Maximize2, Users, Eye, Check, X, ExternalLink, MessageCircle } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export default function Accommodations({ onSelectRoom }) {
   const [activeCategory, setActiveCategory] = useState('All');
@@ -16,7 +17,13 @@ export default function Accommodations({ onSelectRoom }) {
     <section id="cottages" className="py-24 bg-[#FAF8F5] text-[#2C2825] relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16">
+        <motion.div 
+          initial={{ y: 30, opacity: 0 }}
+          whileInView={{ y: 0, opacity: 1 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.8 }}
+          className="text-center max-w-3xl mx-auto mb-16"
+        >
           <span className="text-xs uppercase tracking-[0.3em] text-[#D97757] font-semibold block mb-3">
             Sanctuary & Living
           </span>
@@ -26,10 +33,16 @@ export default function Accommodations({ onSelectRoom }) {
           <p className="text-sm sm:text-base text-[#7A7067] font-light leading-relaxed">
             Crafted from natural teak, bamboo, and local materials, each cottage offers a seamless bridge between refined luxury and raw Goan coastal nature.
           </p>
-        </div>
+        </motion.div>
 
         {/* Category Filter Pills */}
-        <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mb-12">
+        <motion.div 
+          initial={{ y: 20, opacity: 0 }}
+          whileInView={{ y: 0, opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mb-12"
+        >
           {categories.map((cat) => (
             <button
               key={cat}
@@ -43,22 +56,28 @@ export default function Accommodations({ onSelectRoom }) {
               {cat}
             </button>
           ))}
-        </div>
+        </motion.div>
 
         {/* Rooms Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {filteredRooms.map((room) => (
-            <div
-              key={room.id}
-              className="group bg-white border border-[#E6DEC0] rounded-3xl overflow-hidden hover:border-[#D97757] transition-all duration-500 flex flex-col shadow-lg hover:shadow-xl"
-            >
-              {/* Image Container */}
-              <div className="relative h-72 overflow-hidden">
-                <img
-                  src={room.image}
-                  alt={room.name}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                />
+        <motion.div layout className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <AnimatePresence>
+            {filteredRooms.map((room) => (
+              <motion.div
+                layout
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                transition={{ duration: 0.4 }}
+                key={room.id}
+                className="group bg-white border border-[#E6DEC0] rounded-3xl overflow-hidden hover:border-[#D97757] transition-all duration-500 flex flex-col shadow-lg hover:shadow-xl"
+              >
+                {/* Image Container */}
+                <div className="relative h-72 overflow-hidden">
+                  <img
+                    src={room.image}
+                    alt={room.name}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                  />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
 
                 {/* View Badge */}
@@ -114,15 +133,27 @@ export default function Accommodations({ onSelectRoom }) {
                   </a>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </motion.div>
       </div>
 
       {/* Room Detail Drawer Modal */}
+      <AnimatePresence>
       {selectedRoomModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-md">
-          <div className="bg-white border border-[#E6DEC0] rounded-3xl max-w-3xl w-full max-h-[90vh] overflow-y-auto p-6 sm:p-8 relative text-[#2C2825] shadow-2xl">
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-md"
+        >
+          <motion.div 
+            initial={{ scale: 0.9, y: 50, opacity: 0 }}
+            animate={{ scale: 1, y: 0, opacity: 1 }}
+            exit={{ scale: 0.9, y: 50, opacity: 0 }}
+            className="bg-white border border-[#E6DEC0] rounded-3xl max-w-3xl w-full max-h-[90vh] overflow-y-auto p-6 sm:p-8 relative text-[#2C2825] shadow-2xl"
+          >
             <button
               onClick={() => setSelectedRoomModal(null)}
               className="absolute top-6 right-6 p-2 rounded-full bg-slate-100 hover:bg-slate-200 text-[#2C2825] transition-colors"
@@ -188,9 +219,10 @@ export default function Accommodations({ onSelectRoom }) {
                 </div>
               ))}
             </div>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       )}
+      </AnimatePresence>
     </section>
   );
 }

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { GALLERY_ITEMS, RESORT_INFO } from '../data/resortData';
 import { Sparkles, Maximize2, X, ExternalLink, Play } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export default function Gallery() {
   const [activeCategory, setActiveCategory] = useState('All');
@@ -16,7 +17,13 @@ export default function Gallery() {
     <section id="gallery" className="py-24 bg-[#F5EFE6] text-[#2C2825] relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16">
+        <motion.div 
+          initial={{ y: 30, opacity: 0 }}
+          whileInView={{ y: 0, opacity: 1 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.8 }}
+          className="text-center max-w-3xl mx-auto mb-16"
+        >
           <span className="text-xs uppercase tracking-[0.3em] text-[#D97757] font-semibold block mb-3">
             Visual Storytelling
           </span>
@@ -26,10 +33,16 @@ export default function Gallery() {
           <p className="text-sm sm:text-base text-[#7A7067] font-light leading-relaxed">
             Immerse yourself in authentic moments of barefoot luxury, oceanfront serenity, organic Goan dining, and mindful yoga at Anahata Retreat.
           </p>
-        </div>
+        </motion.div>
 
         {/* Category Tabs */}
-        <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mb-12">
+        <motion.div 
+          initial={{ y: 20, opacity: 0 }}
+          whileInView={{ y: 0, opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mb-12"
+        >
           {categories.map((cat) => (
             <button
               key={cat}
@@ -43,16 +56,22 @@ export default function Gallery() {
               {cat}
             </button>
           ))}
-        </div>
+        </motion.div>
 
         {/* Gallery Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {filteredItems.map((item) => (
-            <div
-              key={item.id}
-              onClick={() => setSelectedImage(item)}
-              className="group relative h-72 rounded-3xl overflow-hidden shadow-md hover:shadow-2xl border border-[#E6DEC0] cursor-pointer transform hover:-translate-y-1 transition-all duration-500"
-            >
+        <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <AnimatePresence>
+            {filteredItems.map((item) => (
+              <motion.div
+                layout
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                transition={{ duration: 0.4 }}
+                key={item.id}
+                onClick={() => setSelectedImage(item)}
+                className="group relative h-72 rounded-3xl overflow-hidden shadow-md hover:shadow-2xl border border-[#E6DEC0] cursor-pointer transform transition-all duration-500"
+              >
               <img
                 src={item.image}
                 alt={item.title}
@@ -79,15 +98,27 @@ export default function Gallery() {
                   {item.caption}
                 </p>
               </div>
-            </div>
-          ))}
-        </div>
+            </motion.div>
+            ))}
+          </AnimatePresence>
+        </motion.div>
       </div>
 
       {/* Lightbox Modal */}
+      <AnimatePresence>
       {selectedImage && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md">
-          <div className="bg-white border border-[#E6DEC0] rounded-3xl max-w-4xl w-full p-6 sm:p-8 relative text-[#2C2825] shadow-2xl overflow-hidden">
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-md"
+        >
+          <motion.div 
+            initial={{ scale: 0.9, y: 50, opacity: 0 }}
+            animate={{ scale: 1, y: 0, opacity: 1 }}
+            exit={{ scale: 0.9, y: 50, opacity: 0 }}
+            className="bg-white border border-[#E6DEC0] rounded-3xl max-w-4xl w-full p-6 sm:p-8 relative text-[#2C2825] shadow-2xl overflow-hidden"
+          >
             <button
               onClick={() => setSelectedImage(null)}
               className="absolute top-6 right-6 p-2.5 rounded-full bg-slate-100 hover:bg-slate-200 text-[#2C2825] z-10 transition-colors"
@@ -126,9 +157,10 @@ export default function Gallery() {
                 <ExternalLink className="w-3.5 h-3.5" />
               </a>
             </div>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       )}
+      </AnimatePresence>
     </section>
   );
 }
