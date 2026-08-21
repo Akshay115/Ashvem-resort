@@ -1,132 +1,286 @@
 import { useEffect, useState } from 'react';
 import { AnimatePresence, motion, useScroll, useSpring } from 'framer-motion';
-import { ArrowDown, ArrowUpRight, MapPin, Menu, Phone, Volume2, VolumeX, X } from 'lucide-react';
+import {
+  ArrowDown,
+  ArrowRight,
+  ArrowUpRight,
+  CalendarDays,
+  Check,
+  ChevronDown,
+  Clock3,
+  MapPin,
+  Menu,
+  MessageCircle,
+  Sparkles,
+  Waves,
+  X,
+} from 'lucide-react';
 import { RESORT_INFO } from './data/resortData';
 import { InstagramIcon } from './components/SocialIcons';
 
+const BOOKING_LINK = RESORT_INFO.swiftbookUrl;
+
 const stays = [
   {
-    name: 'Sea-view Bungalows',
-    note: 'A front-row seat to the Arabian Sea',
-    image: '/images/sea-view-bungalow.webp',
-    description: 'Generous, light-filled spaces with private sit-outs, made for slow mornings and long sunsets.'
+    name: 'Sea-view cottages',
+    detail: 'Only three, with uninterrupted Arabian Sea views',
+    image: '/images/old-site-cottage.webp',
+    description: 'Palm-thatched wooden cabanas raised on stilts, each with a private veranda for slow mornings beside the tide.',
+    features: ['Air conditioned', 'Private bathroom', 'Mini fridge'],
   },
   {
-    name: 'Garden Cottages',
-    note: 'Tucked beneath the coconut palms',
-    image: '/images/real/real_cottage1.jpg',
-    description: 'Earthy coastal rooms surrounded by tropical green, only a barefoot stroll from Ashwem beach.'
-  }
+    name: 'Partial sea-view cottages',
+    detail: 'A glimpse of blue through the palms',
+    image: '/images/sea-view-bungalow.webp',
+    description: 'The same easy indoor-outdoor rhythm, tucked slightly deeper into the tropical garden and moments from the sand.',
+    features: ['Private balcony', 'Hot water', 'Wi-Fi'],
+  },
+  {
+    name: 'Goan-style bungalows',
+    detail: 'Tiled roofs, cool shade and private verandas',
+    image: '/images/old-site-bungalow.webp',
+    description: 'Characterful Goan-Portuguese spaces with rain showers, cotton sheets and a choice of sea or garden outlooks.',
+    features: ['Rain shower', 'Tea and coffee', 'In-room safe'],
+  },
 ];
 
 const moments = [
-  ['/images/real/real_beach.jpg', 'The beach, at your doorstep'],
+  ['/images/old-site-resort.webp', 'A retreat beneath the palms'],
   ['/images/real/real_dining.jpg', 'Fresh plates at L’Atelier'],
-  ['/images/real/real_yoga.jpg', 'Move with the morning'],
-  ['/images/golden-hour.webp', 'Golden hours, unhurried'],
-  ['/images/real/094a0d_2940186ec2e1433aa5a3f51d4f19d90c~mv2.jpg', 'A home among palms']
+  ['/images/old-site-yoga.webp', 'Morning movement by the sea'],
+  ['/images/golden-hour.webp', 'Ashwem at golden hour'],
+  ['/images/real/real_cottage1.jpg', 'A veranda made for lingering'],
+  ['/images/old-site-beach.webp', 'The beach at your doorstep'],
+];
+
+const amenities = [
+  ['Beachfront', 'Step from garden to sand, without crossing a road.'],
+  ['Daily yoga', 'Monday to Saturday, complimentary for resident guests.'],
+  ['L’Atelier', 'Goan and international food, fresh juices and house-baked bread.'],
+  ['Wellness', 'Massage, meditation and personalised restorative sessions.'],
+  ['Retreats', 'A naturally held setting for groups, trainings and private gatherings.'],
+  ['Stay connected', 'Complimentary Wi-Fi throughout your time at Anahata.'],
+];
+
+const faqs = [
+  ['Where exactly is Anahata Retreat?', 'We are directly on Ashwem Beach in Mandrem, North Goa, next to Ajoba Temple. Use the map below for the most accurate route to our entrance.'],
+  ['Is yoga included with my stay?', 'The 8:00–9:00 am class, Monday to Saturday, is complimentary for in-house guests. The programme can change seasonally, so please confirm with us before arrival.'],
+  ['Does the retreat have direct beach access?', 'Yes. Anahata is a true beachfront property: the tropical garden opens straight onto Ashwem Beach.'],
+  ['Can I organise a private retreat or group stay?', 'Yes. We host yoga holidays, teacher trainings, workshops and group getaways, with accommodation, meals, practice space and yoga props available.'],
+  ['How can I reserve a table or arrange a transfer?', 'Call or WhatsApp our team. We can help with L’Atelier reservations, airport transfers and practical details for your stay.'],
 ];
 
 const reveal = {
-  initial: { opacity: 0, y: 36 },
+  initial: { opacity: 0, y: 28 },
   whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true, margin: '-12%' },
-  transition: { duration: 0.9, ease: [0.22, 1, 0.36, 1] }
+  viewport: { once: true, margin: '-10%' },
+  transition: { duration: 0.75, ease: [0.22, 1, 0.36, 1] },
 };
 
-function Leaf({ className = '' }) {
-  return <svg className={className} viewBox="0 0 180 360" fill="none" aria-hidden="true"><path d="M87 358C86 236 90 113 160 10M91 278C58 259 31 225 16 184M102 219C137 199 158 168 170 132M108 152C77 128 61 98 54 64M126 89C148 74 161 54 169 30" stroke="currentColor" strokeWidth="1.4"/><path d="M17 184c39 4 64 34 74 94-43-13-70-43-74-94ZM54 64c37 14 52 43 54 88-35-18-53-47-54-88ZM170 132c-4 41-25 70-68 87 5-46 28-75 68-87ZM169 30c-2 29-16 49-43 59 4-29 18-49 43-59Z" fill="currentColor" opacity=".08"/></svg>;
+function Brand({ light = false }) {
+  return (
+    <span className={`brand ${light ? 'brand-light' : ''}`}>
+      <strong>ANAHATA</strong>
+      <small>RETREAT · GOA</small>
+    </span>
+  );
 }
 
 function App() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [soundOn, setSoundOn] = useState(false);
   const [lightbox, setLightbox] = useState(null);
   const { scrollYProgress } = useScroll();
-  const progress = useSpring(scrollYProgress, { stiffness: 80, damping: 25 });
+  const progress = useSpring(scrollYProgress, { stiffness: 90, damping: 25 });
 
   useEffect(() => {
-    document.body.style.overflow = menuOpen || lightbox ? 'hidden' : '';
-    return () => { document.body.style.overflow = ''; };
+    const overlayOpen = menuOpen || lightbox !== null;
+    document.body.style.overflow = overlayOpen ? 'hidden' : '';
+    const closeOverlay = (event) => {
+      if (event.key === 'Escape') {
+        setMenuOpen(false);
+        setLightbox(null);
+      }
+    };
+    window.addEventListener('keydown', closeOverlay);
+    return () => {
+      document.body.style.overflow = '';
+      window.removeEventListener('keydown', closeOverlay);
+    };
   }, [menuOpen, lightbox]);
 
-  const toggleSound = () => {
-    const audio = document.querySelector('#ocean-audio');
-    if (soundOn) audio.pause(); else audio.play().catch(() => {});
-    setSoundOn(!soundOn);
-  };
+  return (
+    <>
+      <a className="skip-link" href="#main-content">Skip to content</a>
+      <motion.div className="scroll-progress" style={{ scaleX: progress }} />
 
-  return <main>
-    <motion.div className="scroll-progress" style={{ scaleX: progress }} />
-    <audio id="ocean-audio" src="/video/waves.mp4" loop preload="none" />
+      <header className="site-header">
+        <a href="#top" aria-label="Anahata Retreat home"><Brand light /></a>
+        <nav className="desktop-nav" aria-label="Main navigation">
+          <a href="#story">Our story</a>
+          <a href="#stay">Stay</a>
+          <a href="#dine">Dine</a>
+          <a href="#wellness">Wellness</a>
+          <a href="#find-us">Find us</a>
+        </nav>
+        <a className="header-book" href={BOOKING_LINK} target="_blank" rel="noreferrer">
+          Check availability <ArrowUpRight aria-hidden="true" size={15} />
+        </a>
+        <button className="menu-button" onClick={() => setMenuOpen(true)} aria-label="Open menu" aria-expanded={menuOpen}>
+          <Menu aria-hidden="true" />
+        </button>
+      </header>
 
-    <header className="nav">
-      <a className="wordmark" href="#top" aria-label="Anahata home">ANAHATA <small>RETREAT · GOA</small></a>
-      <nav className="nav-links" aria-label="Main navigation">
-        <a href="#story">Our story</a><a href="#stay">Stay</a><a href="#dine">Dine</a><a href="#wellness">Wellness</a>
-      </nav>
-      <a className="book-link" href={RESORT_INFO.swiftbookUrl} target="_blank" rel="noreferrer">Book your stay <ArrowUpRight size={15}/></a>
-      <button className="menu-button" onClick={() => setMenuOpen(true)} aria-label="Open menu"><Menu /></button>
-    </header>
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.div className="mobile-menu" role="dialog" aria-modal="true" aria-label="Navigation menu" initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }} transition={{ duration: 0.5, ease: [0.76, 0, 0.24, 1] }}>
+            <div className="mobile-menu-top"><Brand light /><button autoFocus onClick={() => setMenuOpen(false)} aria-label="Close menu"><X /></button></div>
+            <nav aria-label="Mobile navigation">
+              {['story', 'stay', 'dine', 'wellness', 'gallery', 'find-us'].map((item, index) => (
+                <a key={item} href={`#${item}`} onClick={() => setMenuOpen(false)}><span>0{index + 1}</span>{item.replace('-', ' ')}</a>
+              ))}
+            </nav>
+            <a className="mobile-book" href={BOOKING_LINK} target="_blank" rel="noreferrer">Book your stay <ArrowUpRight size={16} /></a>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-    <AnimatePresence>{menuOpen && <motion.div className="mobile-menu" initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }} transition={{ duration: .6, ease: [0.76,0,0.24,1] }}>
-      <button onClick={() => setMenuOpen(false)} aria-label="Close menu"><X /></button>
-      {['story','stay','dine','wellness','gallery'].map((item, i) => <a key={item} href={`#${item}`} onClick={() => setMenuOpen(false)}><span>0{i+1}</span>{item}</a>)}
-      <a className="menu-book" href={RESORT_INFO.swiftbookUrl}>Book your stay</a>
-    </motion.div>}</AnimatePresence>
+      <main id="main-content">
+        <section className="hero" id="top">
+          <motion.img initial={{ scale: 1.08 }} animate={{ scale: 1 }} transition={{ duration: 2.2, ease: 'easeOut' }} src="/images/anahata-hero.webp" alt="Palm-fringed Anahata Retreat beside Ashwem Beach" fetchPriority="high" />
+          <div className="hero-shade" />
+          <motion.div className="hero-copy" initial={{ opacity: 0, y: 28 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35, duration: 1 }}>
+            <p className="eyebrow eyebrow-light">Beachfront · Ashwem · North Goa</p>
+            <h1>Where the day<br />begins with <em>the sea.</em></h1>
+            <p>A soulful retreat of palm-thatched cottages, nourishing food and morning yoga, set directly on the quiet sands of Ashwem.</p>
+            <div className="hero-actions">
+              <a className="button button-coral" href={BOOKING_LINK} target="_blank" rel="noreferrer">Book your stay <ArrowUpRight size={16} /></a>
+              <a className="hero-text-link" href="#story">Discover Anahata <ArrowDown size={16} /></a>
+            </div>
+          </motion.div>
+          <div className="hero-aside"><span>15.6449° N</span><span>73.7179° E</span></div>
+        </section>
 
-    <section className="hero" id="top">
-      <motion.img initial={{ scale: 1.12 }} animate={{ scale: 1 }} transition={{ duration: 2.4, ease: 'easeOut' }} src="/images/anahata-hero.webp" alt="Anahata Retreat overlooking palm-fringed Ashwem Beach" />
-      <div className="hero-shade" />
-      <motion.div className="hero-copy" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .5, duration: 1.2 }}>
-        <p className="eyebrow light">Ashwem Beach · North Goa</p>
-        <h1>Come back<br/>to <em>yourself.</em></h1>
-        <p className="hero-intro">A soulful hideaway where palms sway, waves whisper, and life moves at the pace of the sea.</p>
-      </motion.div>
-      <a className="hero-scroll" href="#story"><span>Discover Anahata</span><ArrowDown size={17}/></a>
-      <button className="sound" onClick={toggleSound}>{soundOn ? <Volume2 size={16}/> : <VolumeX size={16}/>}<span>{soundOn ? 'Ocean on' : 'Hear the ocean'}</span></button>
-    </section>
+        <div className="fact-strip" aria-label="Resort highlights">
+          <span><Waves size={18} /> Direct beach access</span>
+          <span><Sparkles size={18} /> Daily morning yoga</span>
+          <span><CalendarDays size={18} /> Retreats since 2012</span>
+        </div>
 
-    <section className="intro" id="story">
-      <Leaf className="leaf leaf-one" />
-      <motion.div {...reveal} className="intro-title"><p className="eyebrow">A retreat in the truest sense</p><h2>Be present.<br/><em>Breathe.</em> Unwind.</h2></motion.div>
-      <motion.div {...reveal} className="intro-copy"><p>Cradled by swaying palms on the serene shores of Ashwem, Anahata is a place to reconnect with nature, with people, and with the quiet parts of yourself.</p><p>Here, tiled-roof cottages open to salt-laced air. Breakfasts linger. Bare feet are encouraged. Every detail is shaped by warmth, simplicity and the five elements that live within us.</p><a className="text-link" href="#stay">Find your space <ArrowUpRight size={15}/></a></motion.div>
-      <div className="elements" aria-label="The five elements"><span>Water <i>joy</i></span><span>Fire <i>power</i></span><span>Air <i>freedom</i></span><span>Sky <i>oneness</i></span><span>Earth <i>stability</i></span></div>
-    </section>
+        <section className="story section" id="story">
+          <motion.div {...reveal} className="story-heading">
+            <p className="eyebrow">A retreat in the truest sense</p>
+            <h2>Come as you are.<br /><em>Leave a little lighter.</em></h2>
+          </motion.div>
+          <motion.div {...reveal} className="story-copy">
+            <p className="lead">Founded in 2012, Anahata grew from a simple idea: create a warm, generous place where people can return to nature and to themselves.</p>
+            <p>Life here follows the shoreline. Wake with the light, wander barefoot to breakfast, swim when the sea calls and let the evening unfold beneath the palms. There is no rush, and that is precisely the point.</p>
+            <a className="text-link" href="#stay">Find your space <ArrowRight size={16} /></a>
+          </motion.div>
+          <motion.figure {...reveal} className="story-image">
+            <img src="/images/old-site-resort.webp" alt="Anahata Retreat nestled among tropical palms" loading="lazy" />
+            <figcaption><span>01</span> Between tropical garden and Arabian Sea</figcaption>
+          </motion.figure>
+          <blockquote>“Anahata” is the heart centre: the place where earth and sky, stillness and movement, meet.</blockquote>
+        </section>
 
-    <section className="stay" id="stay">
-      <div className="section-heading"><p className="eyebrow">Sleep by the sea</p><h2>Spaces made<br/>for <em>slow living.</em></h2><p>Natural textures, cool shade and the sound of the tide. Choose the stay that feels like yours.</p></div>
-      <div className="stay-list">{stays.map((room, i) => <motion.article {...reveal} className="stay-card" key={room.name}>
-        <div className="stay-image"><img src={room.image} alt={room.name}/><span>0{i+1}</span></div>
-        <div className="stay-details"><p>{room.note}</p><h3>{room.name}</h3><p>{room.description}</p><a href={RESORT_INFO.swiftbookUrl} target="_blank" rel="noreferrer">Explore your stay <ArrowUpRight size={15}/></a></div>
-      </motion.article>)}</div>
-    </section>
+        <section className="stay section" id="stay">
+          <div className="section-intro">
+            <div><p className="eyebrow">Sleep by the sea</p><h2>Spaces made for<br /><em>slow living.</em></h2></div>
+            <p>Natural materials, cooling shade and a veranda of your own. Choose a front-row view of the Arabian Sea or the deep quiet of the garden.</p>
+          </div>
+          <div className="stay-grid">
+            {stays.map((room, index) => (
+              <motion.article {...reveal} className="stay-card" key={room.name}>
+                <div className="stay-image"><img src={room.image} alt={room.name} loading="lazy" /><span>0{index + 1}</span></div>
+                <p className="stay-detail">{room.detail}</p>
+                <h3>{room.name}</h3>
+                <p>{room.description}</p>
+                <ul>{room.features.map((feature) => <li key={feature}><Check size={13} />{feature}</li>)}</ul>
+                <a href={BOOKING_LINK} target="_blank" rel="noreferrer">Check availability <ArrowUpRight size={15} /></a>
+              </motion.article>
+            ))}
+          </div>
+          <p className="stay-note">Room outlooks and layouts vary. Our team will help you choose the right space for your stay.</p>
+        </section>
 
-    <section className="dining" id="dine">
-      <div className="dining-image"><img src="/images/real/real_dining.jpg" alt="Fresh coastal dining at L'Atelier" /></div>
-      <motion.div {...reveal} className="dining-copy"><p className="eyebrow light">L’Atelier · Beachfront dining</p><h2>Sunshine on<br/><em>every plate.</em></h2><p>Fresh local ingredients, global flavours and food made with feeling. Join us barefoot for nourishing breakfasts, languid lunches and dinners beneath a painted sky.</p><div className="hours"><span>Breakfast <b>8–11 am</b></span><span>All-day dining <b>12–10 pm</b></span></div><a className="light-link" href={`tel:${RESORT_INFO.phone}`}>Reserve a table <ArrowUpRight size={15}/></a></motion.div>
-    </section>
+        <section className="dining" id="dine">
+          <div className="dining-image"><img src="/images/old-site-dining.webp" alt="Colourful, freshly prepared food at L’Atelier" loading="lazy" /></div>
+          <motion.div {...reveal} className="dining-copy">
+            <p className="eyebrow eyebrow-light">L’Atelier · At the water’s edge</p>
+            <h2>Good food,<br /><em>made with feeling.</em></h2>
+            <p>Goan flavours meet well-travelled favourites at our open-air beach restaurant. Expect fresh juices, house-baked breads, vibrant vegetarian and vegan plates, and local dishes best shared under the stars.</p>
+            <div className="dining-list"><span>Goan Sherpa dinner</span><span>Fresh breakfast</span><span>Vegan friendly</span></div>
+            <a className="line-link line-link-light" href={`tel:${RESORT_INFO.phoneRaw}`}>Reserve a table <ArrowUpRight size={16} /></a>
+          </motion.div>
+        </section>
 
-    <section className="wellness" id="wellness">
-      <motion.div {...reveal} className="wellness-copy"><p className="eyebrow">Return to your rhythm</p><h2>Move. Breathe.<br/><em>Feel alive.</em></h2><p>Greet the day with yoga as the tide rolls in. Find stillness through meditation, movement and restorative rituals held in the soft energy of Ashwem.</p><p className="wellness-note">Yoga sessions and retreat schedules are seasonal. Speak with our team to shape your Anahata experience.</p><a className="text-link" href={RESORT_INFO.whatsapp} target="_blank" rel="noreferrer">Plan your retreat <ArrowUpRight size={15}/></a></motion.div>
-      <div className="wellness-images"><motion.img {...reveal} src="/images/real/real_yoga.jpg" alt="Yoga at Anahata Retreat"/><img src="/images/real/DSCF6574_JPG.jpg" alt="Mindful moments by the sea"/></div>
-      <Leaf className="leaf leaf-two" />
-    </section>
+        <section className="wellness section" id="wellness">
+          <motion.div {...reveal} className="wellness-copy">
+            <p className="eyebrow">Return to your rhythm</p>
+            <h2>Move. Breathe.<br /><em>Feel alive.</em></h2>
+            <p className="lead">Practice with the sound of the tide below you. Our open-air yoga space welcomes complete beginners and lifelong students alike.</p>
+            <div className="schedule"><Clock3 size={19} /><div><strong>Morning yoga</strong><span>Monday–Saturday · 8:00–9:00 am</span><small>Complimentary for in-house guests</small></div></div>
+            <p>Complete your reset with meditation, massage and personalised wellness sessions, or bring your own community for a retreat held close to the elements.</p>
+            <a className="text-link" href={RESORT_INFO.whatsapp} target="_blank" rel="noreferrer">Plan a retreat <ArrowRight size={16} /></a>
+          </motion.div>
+          <div className="wellness-collage">
+            <motion.img {...reveal} src="/images/old-site-yoga.webp" alt="Yoga practice overlooking Ashwem Beach" loading="lazy" />
+            <motion.img {...reveal} src="/images/old-site-wellness.webp" alt="Restorative wellness treatment at Anahata" loading="lazy" />
+            <span>Body · Breath · Being</span>
+          </div>
+        </section>
 
-    <section className="gallery" id="gallery">
-      <div className="gallery-head"><p className="eyebrow">Postcards from paradise</p><h2>A glimpse of<br/><em>life at Anahata.</em></h2><a href={RESORT_INFO.instagram} target="_blank" rel="noreferrer"><InstagramIcon className="w-[17px] h-[17px]"/> Follow our journey</a></div>
-      <div className="gallery-grid">{moments.map(([image, title], i) => <motion.button {...reveal} key={image} onClick={() => setLightbox({image,title})} aria-label={`View ${title}`}><img src={image} alt={title}/><span>{title}</span><i>0{i+1}</i></motion.button>)}</div>
-    </section>
+        <section className="amenities section" aria-labelledby="amenities-title">
+          <div className="amenities-heading"><p className="eyebrow">The essentials, thoughtfully covered</p><h2 id="amenities-title">Everything you need.<br /><em>Nothing you don’t.</em></h2></div>
+          <div className="amenity-grid">{amenities.map(([title, description], index) => <motion.div {...reveal} key={title}><span>0{index + 1}</span><h3>{title}</h3><p>{description}</p></motion.div>)}</div>
+        </section>
 
-    <section className="closing">
-      <img src="/images/real/094a0d_a90028c2560e486daf42ed36f0453bb8f000.jpg" alt="Sunset over Ashwem Beach" />
-      <div><p className="eyebrow light">Your place by the sea</p><h2>Let the tide<br/><em>bring you home.</em></h2><a href={RESORT_INFO.swiftbookUrl} target="_blank" rel="noreferrer">Book your Anahata stay <ArrowUpRight size={17}/></a></div>
-    </section>
+        <section className="gallery section" id="gallery">
+          <div className="gallery-heading"><p className="eyebrow">Postcards from Anahata</p><h2>A glimpse of<br /><em>life by the sea.</em></h2><a className="text-link" href={RESORT_INFO.instagram} target="_blank" rel="noreferrer"><InstagramIcon className="instagram-icon" /> Follow on Instagram</a></div>
+          <div className="gallery-grid">{moments.map(([image, title], index) => <motion.button {...reveal} key={image} onClick={() => setLightbox({ image, title })} aria-label={`Enlarge: ${title}`}><img src={image} alt={title} loading="lazy" /><span>{title}</span><i>0{index + 1}</i></motion.button>)}</div>
+        </section>
 
-    <footer><div className="footer-brand"><span>ANAHATA</span><p>Beachfront retreat · Ashwem, Goa</p></div><div><p className="footer-label">Find us</p><a href={RESORT_INFO.mapsUrl}><MapPin size={14}/>{RESORT_INFO.address}</a></div><div><p className="footer-label">Talk to us</p><a href={`tel:${RESORT_INFO.phone}`}><Phone size={14}/>{RESORT_INFO.phone}</a><a href={`mailto:${RESORT_INFO.email}`}>{RESORT_INFO.email}</a></div><div className="footer-bottom"><span>© {new Date().getFullYear()} Anahata Retreat</span><a href={RESORT_INFO.instagram}>Instagram</a><a href={RESORT_INFO.facebook}>Facebook</a><a href={RESORT_INFO.tripadvisor}>Tripadvisor</a></div></footer>
+        <section className="location" id="find-us">
+          <div className="location-map"><iframe title="Map showing Anahata Retreat on Ashwem Beach" src="https://www.google.com/maps?q=15.6449687,73.7178535&z=16&output=embed" loading="lazy" referrerPolicy="no-referrer-when-downgrade" /></div>
+          <motion.div {...reveal} className="location-copy">
+            <p className="eyebrow">Find your way to quiet</p>
+            <h2>On Ashwem Beach,<br /><em>North Goa.</em></h2>
+            <p>Set beside Ajoba Temple in Mandrem, Anahata feels wonderfully removed while keeping North Goa’s favourite beaches and restaurants within easy reach.</p>
+            <address>{RESORT_INFO.address}</address>
+            <a className="button button-green" href={RESORT_INFO.mapsUrl} target="_blank" rel="noreferrer"><MapPin size={16} /> Open in Google Maps</a>
+            <p className="transfer-note">Arriving by air? Ask our team to arrange your airport transfer.</p>
+          </motion.div>
+        </section>
 
-    <AnimatePresence>{lightbox && <motion.div className="lightbox" initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}} onClick={() => setLightbox(null)}><button aria-label="Close image"><X/></button><motion.img initial={{scale:.94}} animate={{scale:1}} src={lightbox.image} alt={lightbox.title}/><p>{lightbox.title}</p></motion.div>}</AnimatePresence>
-  </main>;
+        <section className="faq section" aria-labelledby="faq-title">
+          <div><p className="eyebrow">Before you arrive</p><h2 id="faq-title">A few useful<br /><em>things to know.</em></h2></div>
+          <div className="faq-list">{faqs.map(([question, answer]) => <details key={question}><summary>{question}<ChevronDown size={18} /></summary><p>{answer}</p></details>)}</div>
+        </section>
+
+        <section className="closing">
+          <img src="/images/real/real_beach.jpg" alt="Sunset on Ashwem Beach" loading="lazy" />
+          <div className="closing-shade" />
+          <motion.div {...reveal}><p className="eyebrow eyebrow-light">Your place by the sea</p><h2>Let the tide<br /><em>bring you home.</em></h2><p>Come for the beach. Stay for the way Anahata makes you feel.</p><a className="button button-coral" href={BOOKING_LINK} target="_blank" rel="noreferrer">Check availability <ArrowUpRight size={16} /></a></motion.div>
+        </section>
+      </main>
+
+      <footer>
+        <div className="footer-main"><div className="footer-brand"><Brand light /><p>A barefoot beachfront retreat on the quiet sands of Ashwem, North Goa.</p></div><div><p className="footer-label">Explore</p><a href="#story">Our story</a><a href="#stay">Stay</a><a href="#dine">L’Atelier</a><a href="#wellness">Wellness</a></div><div><p className="footer-label">Connect</p><a href={`tel:${RESORT_INFO.phoneRaw}`}>{RESORT_INFO.phone}</a><a href={`mailto:${RESORT_INFO.email}`}>{RESORT_INFO.email}</a><a href={RESORT_INFO.whatsapp} target="_blank" rel="noreferrer">WhatsApp</a></div><div><p className="footer-label">Follow</p><a href={RESORT_INFO.instagram} target="_blank" rel="noreferrer">Instagram</a><a href={RESORT_INFO.facebook} target="_blank" rel="noreferrer">Facebook</a><a href={RESORT_INFO.tripadvisor} target="_blank" rel="noreferrer">Tripadvisor</a></div></div>
+        <div className="footer-bottom"><span>© {new Date().getFullYear()} Anahata Retreat</span><span>Ashwem Beach · Goa · India</span></div>
+      </footer>
+
+      <a className="whatsapp-float" href={RESORT_INFO.whatsapp} target="_blank" rel="noreferrer" aria-label="Chat with Anahata Retreat on WhatsApp"><MessageCircle size={19} /><span>Chat with us</span></a>
+
+      <AnimatePresence>
+        {lightbox && (
+          <motion.div className="lightbox" role="dialog" aria-modal="true" aria-label={lightbox.title} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setLightbox(null)}>
+            <button autoFocus aria-label="Close image" onClick={() => setLightbox(null)}><X /></button>
+            <motion.figure initial={{ scale: 0.96 }} animate={{ scale: 1 }} onClick={(event) => event.stopPropagation()}><img src={lightbox.image} alt={lightbox.title} /><figcaption>{lightbox.title}</figcaption></motion.figure>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
+  );
 }
 
 export default App;
